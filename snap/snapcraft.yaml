@@ -1,0 +1,36 @@
+name: octave
+base: core18 # the base snap is the execution environment for this snap
+version: '5.1.0'
+summary: Interactive programming environment for numerical computations
+description: |
+  GNU Octave is a high-level interpreted language, primarily intended for
+  numerical computations. It provides capabilities for the numerical
+  solution of linear and nonlinear problems, and for performing other
+  numerical experiments. It also provides extensive graphics capabilities
+  for data visualization and manipulation. Octave is normally used through
+  its interactive command line interface, but it can also be used to write
+  non-interactive programs. The Octave language is quite similar to
+  Matlab so that most programs are easily portable.
+
+grade: stable # must be 'stable' to release into candidate/stable channels
+confinement: strict
+
+apps:
+  octave:
+    command: bin/octave
+  octave-cli:
+    command: bin/octave-cli
+
+parts:
+  octave:
+    plugin: autotools
+    source-type: tar
+    source: https://ftpmirror.gnu.org/octave/octave-5.1.0.tar.xz
+    build-packages:
+      - g++
+      - gfortran
+      - make
+      - libopenblas-dev
+      - libfftw3-dev
+      - libpcre3-dev
+      - libreadline-dev
