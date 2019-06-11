@@ -33,12 +33,42 @@ parts:
     source-type: tar
     source: https://ftpmirror.gnu.org/octave/octave-5.1.0.tar.xz
     build-packages:
+      - gfortran
+      - libarpack2-dev
+      - libcurl4-gnutls-dev
       - libfftw3-dev
+      - libglpk-dev
+      - libgraphicsmagick++1-dev
+      - libhdf5-dev
+      - libncurses5-dev
       - libopenblas-dev
       - libpcre3-dev
+      - libqhull-dev
+      - libqrupdate-dev
       - libreadline-dev
+      - libsndfile1-dev
+      - libsuitesparse-dev
+      - portaudio19-dev
+      - texinfo
     stage-packages:
+      - libamd2
+      - libarpack2
+      - libcamd2
+      - libccolamd2
+      - libcholmod3
+      - libcolamd2
+      - libcurl3-gnutls
+      - libcxsparse3
       - libfftw3-double3
       - libfftw3-single3
+      - libglpk40
+      - libgraphicsmagick++-q16-12
+      - libhdf5-100
       - libopenblas-base
       - libpcre3
+      - libportaudio2
+      - libqhull7
+      - libqrupdate1
+      - libsndfile1
+      - libumfpack5
+      - texinfo
