@@ -72,3 +72,5 @@ parts:
       - libsndfile1
       - libumfpack5
       - texinfo
+    organize:
+      usr/lib/$SNAPCRAFT_ARCH_TRIPLET/openblas: usr/lib/$SNAPCRAFT_ARCH_TRIPLET
