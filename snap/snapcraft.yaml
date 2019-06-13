@@ -27,8 +27,10 @@ apps:
   octave:
     command: usr/bin/octave
     environment:
-      LD_LIBRARY_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio"
+      LD_LIBRARY_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa-egl:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri"
       PERL5LIB: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl5/5.26:$SNAP/usr/share/perl5:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl/5.26:$SNAP/usr/share/perl/5.26"
+      LIBGL_DRIVERS_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri"
+      LIBVA_DRIVERS_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri"
       QT_PLUGIN_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins"
       QT_XKB_CONFIG_ROOT: "$SNAP/usr/share/X11/xkb"
     plugs:
