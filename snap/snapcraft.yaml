@@ -37,6 +37,7 @@ apps:
       - desktop
       - desktop-legacy
       - home
+      - opengl
       - pulseaudio
       - unity7
       - wayland
@@ -50,6 +51,7 @@ apps:
       - desktop
       - desktop-legacy
       - home
+      - opengl
       - pulseaudio
       - unity7
       - wayland
