@@ -2,8 +2,41 @@ dist: bionic
 language: generic
 addons:
   apt:
+    packages:
+      - autoconf
+      - automake
+      - autopoint
+      - build-essential
+      - gfortran
+      - gnuplot-qt
+      - libarpack2-dev
+      - libcurl4-gnutls-dev
+      - libfftw3-dev
+      - libfltk1.3-dev
+      - libfontconfig1-dev
+      - libgl2ps-dev
+      - libglpk-dev
+      - libglu1-mesa-dev
+      - libgraphicsmagick++1-dev
+      - libhdf5-dev
+      - libncurses5-dev
+      - libopenblas-dev
+      - libpcre3-dev
+      - libqhull-dev
+      - libqrupdate-dev
+      - libqscintilla2-qt5-dev
+      - libqt5opengl5-dev
+      - libreadline-dev
+      - libsndfile1-dev
+      - libsuitesparse-dev
+      - portaudio19-dev
+      - qtbase5-dev
+      - qttools5-dev
+      - qttools5-dev-tools
+      - texinfo
     update: true
   snaps:
+    - name: core18
     - name: snapcraft
       confinement: classic
 script:
