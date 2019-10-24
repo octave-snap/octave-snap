@@ -1,5 +1,10 @@
 dist: bionic
-language: generic
+language: c++
+env:
+  global:
+    - CFLAGS="-O -fdiagnostics-color"
+    - CXXFLAGS="-O -fdiagnostics-color"
+    - FFLAGS="-O -fdiagnostics-color"
 addons:
   apt:
     packages:
