@@ -1,0 +1,10 @@
+dist: bionic
+language: generic
+addons:
+  apt:
+    update: true
+  snaps:
+    - name: snapcraft
+      confinement: classic
+script:
+  - snapcraft snap --destructive-mode
