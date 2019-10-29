@@ -49,3 +49,6 @@ addons:
       confinement: classic
 script:
   - snapcraft snap --destructive-mode
+deploy:
+  provider: snap
+  edge: true
