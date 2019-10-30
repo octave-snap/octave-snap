@@ -27,6 +27,7 @@ apps:
   octave:
     command: usr/bin/octave
     environment:
+      OCTAVE_HOME: "$SNAP/usr"
       LD_LIBRARY_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa-egl:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri"
       PERL5LIB: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl5/5.26:$SNAP/usr/share/perl5:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl/5.26:$SNAP/usr/share/perl/5.26"
       LIBGL_DRIVERS_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri"
@@ -45,6 +46,7 @@ apps:
   octave-cli:
     command: usr/bin/octave-cli
     environment:
+      OCTAVE_HOME: "$SNAP/usr"
       LD_LIBRARY_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio"
       PERL5LIB: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl5/5.26:$SNAP/usr/share/perl5:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl/5.26:$SNAP/usr/share/perl/5.26"
     plugs:
