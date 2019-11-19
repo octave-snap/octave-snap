@@ -127,6 +127,7 @@ parts:
       - texinfo
     stage-packages:
       - build-essential
+      - curl
       - gfortran
       - gnuplot-qt
       - libamd2
