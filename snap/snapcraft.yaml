@@ -26,6 +26,7 @@ layout:
 apps:
   octave:
     command: usr/bin/octave
+    desktop: usr/share/applications/org.octave.Octave.desktop
     environment:
       OCTAVE_HOME: "$SNAP/usr"
       LD_LIBRARY_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa-egl:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri"
@@ -98,6 +99,9 @@ parts:
     configflags:
       - --prefix=/snap/octave/current/usr
     after: [alsa]
+    override-prime: |
+      snapcraftctl prime
+      sed -i 's|^Icon=octave|Icon=/usr/share/icons/hicolor/scalable/apps/octave.svg|' usr/share/applications/org.octave.Octave.desktop
     build-packages:
       - gfortran
       - libarpack2-dev
