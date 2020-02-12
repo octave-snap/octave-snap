@@ -2,11 +2,9 @@ dist: bionic
 language: c++
 env:
   global:
-    - CC="ccache gcc"
-    - CFLAGS="-O -fdiagnostics-color"
-    - CXX="ccache g++"
-    - CXXFLAGS="-O -fdiagnostics-color"
-    - FFLAGS="-O -fdiagnostics-color"
+    - CFLAGS="-O"
+    - CXXFLAGS="-O"
+    - FFLAGS="-O"
 cache: ccache
 addons:
   apt:
