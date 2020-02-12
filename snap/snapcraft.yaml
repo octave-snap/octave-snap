@@ -86,10 +86,10 @@ parts:
     override-build: |
       install -m644 -D -t $SNAPCRAFT_PART_INSTALL/etc asound.conf
     build-packages:
-    - libasound2-dev
+      - libasound2-dev
     stage-packages:
-    - libasound2
-    - libasound2-plugins
+      - libasound2
+      - libasound2-plugins
 
   octave:
     plugin: autotools
