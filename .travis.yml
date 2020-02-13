@@ -50,3 +50,5 @@ script:
 deploy:
   provider: snap
   edge: true
+  on:
+    repo: octave-snap/octave-snap
