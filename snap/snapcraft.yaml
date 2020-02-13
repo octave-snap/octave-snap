@@ -27,6 +27,7 @@ apps:
   octave:
     command: usr/bin/octave
     desktop: usr/share/applications/org.octave.Octave.desktop
+    common-id: org.octave.Octave
     environment:
       OCTAVE_HOME: "$SNAP/usr"
       LD_LIBRARY_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa-egl:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri"
