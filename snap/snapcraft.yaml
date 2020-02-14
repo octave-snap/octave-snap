@@ -30,7 +30,7 @@ apps:
     common-id: org.octave.Octave
     environment:
       OCTAVE_HOME: "$SNAP/usr"
-      LD_LIBRARY_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa-egl:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri"
+      LD_LIBRARY_PATH: "$SNAP/usr/lib/octave/$SNAPCRAFT_PROJECT_VERSION:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa-egl:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri"
       LOCPATH: "$SNAP/usr/lib/locale"
       PERL5LIB: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl5/5.26:$SNAP/usr/share/perl5:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl/5.26:$SNAP/usr/share/perl/5.26"
       LIBGL_DRIVERS_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri"
@@ -51,7 +51,7 @@ apps:
     command: usr/bin/octave-cli
     environment:
       OCTAVE_HOME: "$SNAP/usr"
-      LD_LIBRARY_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio"
+      LD_LIBRARY_PATH: "$SNAP/usr/lib/octave/$SNAPCRAFT_PROJECT_VERSION:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET:$SNAP/usr/lib:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio"
       LOCPATH: "$SNAP/usr/lib/locale"
       PERL5LIB: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl5/5.26:$SNAP/usr/share/perl5:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl/5.26:$SNAP/usr/share/perl/5.26"
     plugs:
@@ -98,7 +98,7 @@ parts:
     source: https://ftpmirror.gnu.org/octave/octave-5.1.0.tar.xz
     source-checksum: sha256/87b4df6dfa28b1f8028f69659f7a1cabd50adfb81e1e02212ff22c863a29454e
     configflags:
-      - --prefix=/snap/octave/current/usr
+      - --prefix=/usr
     after: [alsa]
     override-prime: |
       snapcraftctl prime
@@ -177,4 +177,3 @@ parts:
       - -usr/share/texmf/ls-R
     organize:
       usr/lib/$SNAPCRAFT_ARCH_TRIPLET/openblas: usr/lib/$SNAPCRAFT_ARCH_TRIPLET
-      snap/octave/current/usr: usr
