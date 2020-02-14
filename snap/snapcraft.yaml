@@ -23,6 +23,33 @@ layout:
   /usr/share/alsa/alsa.conf:
     bind-file: $SNAP/etc/asound.conf
 
+  # Make staged dri and pulseaudio modules available in expected locations
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio
+
+  # Make staged perl modules available in expected perl path directories
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl/5.26:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl/5.26
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl5:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl5
+  /usr/share/perl:
+    symlink: $SNAP/usr/share/perl
+  /usr/share/perl5/Text:
+    symlink: $SNAP/usr/share/perl5/Text
+  /usr/share/perl5/XML:
+    symlink: $SNAP/usr/share/perl5/XML
+
+  # Make staged qt plugins available in expected locations
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5
+
+  # Make xkb configuration files available in expected locations, required
+  # by qt in 18.04, may not be needed in 20.04
+  /usr/share/X11:
+    symlink: $SNAP/usr/share/X11
+
 apps:
   octave:
     command: usr/bin/octave
@@ -30,13 +57,8 @@ apps:
     common-id: org.octave.Octave
     environment:
       OCTAVE_HOME: "$SNAP/usr"
-      LD_LIBRARY_PATH: "$SNAP/usr/lib/octave/$SNAPCRAFT_PROJECT_VERSION:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/mesa-egl:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri"
+      LD_LIBRARY_PATH: "$SNAP/usr/lib/octave/$SNAPCRAFT_PROJECT_VERSION"
       LOCPATH: "$SNAP/usr/lib/locale"
-      PERL5LIB: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl5/5.26:$SNAP/usr/share/perl5:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl/5.26:$SNAP/usr/share/perl/5.26"
-      LIBGL_DRIVERS_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri"
-      LIBVA_DRIVERS_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri"
-      QT_PLUGIN_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5/plugins"
-      QT_XKB_CONFIG_ROOT: "$SNAP/usr/share/X11/xkb"
     plugs:
       - desktop
       - desktop-legacy
@@ -51,9 +73,8 @@ apps:
     command: usr/bin/octave-cli
     environment:
       OCTAVE_HOME: "$SNAP/usr"
-      LD_LIBRARY_PATH: "$SNAP/usr/lib/octave/$SNAPCRAFT_PROJECT_VERSION:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio"
+      LD_LIBRARY_PATH: "$SNAP/usr/lib/octave/$SNAPCRAFT_PROJECT_VERSION"
       LOCPATH: "$SNAP/usr/lib/locale"
-      PERL5LIB: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl5/5.26:$SNAP/usr/share/perl5:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl/5.26:$SNAP/usr/share/perl/5.26"
     plugs:
       - desktop
       - desktop-legacy
