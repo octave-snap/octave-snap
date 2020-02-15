@@ -127,6 +127,13 @@ parts:
       - INSTALL_PROGRAM: "/usr/bin/install -s"
       - INSTALL_STRIP_FLAG: "-s"
       - LDFLAGS: "-Wl,-z,relro $LDFLAGS"
+    override-build: |
+      sed -i "s|%OCTAVE_CONF_CFLAGS%|\"-g -O2 -fstack-protector-strong\"|" src/mkoctfile.in.cc
+      sed -i "s|%OCTAVE_CONF_CPPFLAGS%|\"-D_FORTIFY_SOURCE=2\"|" src/mkoctfile.in.cc
+      sed -i "s|%OCTAVE_CONF_CXXFLAGS%|\"-g -O2 -fstack-protector-strong\"|" src/mkoctfile.in.cc
+      sed -i "s|%OCTAVE_CONF_LDFLAGS%|\"-Wl,-z,relro\"|" src/mkoctfile.in.cc
+      sed -i "s|%OCTAVE_CONF_OCT_LINK_OPTS%|\"-Wl,-z,relro\"|" src/mkoctfile.in.cc
+      snapcraftctl build
     after: [alsa]
     override-prime: |
       snapcraftctl prime
