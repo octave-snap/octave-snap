@@ -1,6 +1,5 @@
 name: octave
 base: core18
-version: '5.1.0'
 summary: Interactive programming environment for numerical computations
 description: |
   GNU Octave is a high-level interpreted language, primarily intended for
@@ -11,50 +10,15 @@ description: |
   its interactive command line interface, but it can also be used to write
   non-interactive programs. The Octave language is quite similar to
   Matlab so that most programs are easily portable.
-
-grade: stable
 confinement: strict
-
-layout:
-  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/alsa-lib:
-    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/alsa-lib
-  /etc/asound.conf:
-    bind-file: $SNAP/etc/asound.conf
-  /usr/share/alsa/alsa.conf:
-    bind-file: $SNAP/etc/asound.conf
-
-  # Make staged dri and pulseaudio modules available in expected locations
-  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri:
-    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri
-  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:
-    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio
-
-  # Make staged perl modules available in expected perl path directories
-  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl/5.26:
-    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl/5.26
-  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl5:
-    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl5
-  /usr/share/perl:
-    symlink: $SNAP/usr/share/perl
-  /usr/share/perl5/Text:
-    symlink: $SNAP/usr/share/perl5/Text
-  /usr/share/perl5/XML:
-    symlink: $SNAP/usr/share/perl5/XML
-
-  # Make staged qt plugins available in expected locations
-  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5:
-    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5
-
-  # Make xkb configuration files available in expected locations, required
-  # by qt in 18.04, may not be needed in 20.04
-  /usr/share/X11:
-    symlink: $SNAP/usr/share/X11
+grade: stable
+version: '5.1.0'
 
 apps:
   octave:
     command: bin/octave
-    desktop: share/applications/org.octave.Octave.desktop
     common-id: org.octave.Octave
+    desktop: share/applications/org.octave.Octave.desktop
     environment:
       OCTAVE_HOME: "$SNAP"
       LD_LIBRARY_PATH: "$SNAP/lib/octave/$SNAPCRAFT_PROJECT_VERSION"
@@ -115,29 +79,37 @@ parts:
 
   octave:
     plugin: autotools
-    source-type: tar
     source: https://ftpmirror.gnu.org/octave/octave-5.1.0.tar.xz
     source-checksum: sha256/87b4df6dfa28b1f8028f69659f7a1cabd50adfb81e1e02212ff22c863a29454e
     build-environment:
+      # Use a sensible default set of build flags, append flags from environment
       - CFLAGS: "-g -O2 -fstack-protector-strong $CFLAGS"
       - CPPFLAGS: "-D_FORTIFY_SOURCE=2 $CPPFLAGS"
       - CXXFLAGS: "-g -O2 -fstack-protector-strong $CXXFLAGS"
       - FFLAGS: "-g -O2 $FFLAGS"
       - FLIBS: "-lgfortran -lquadmath -lm"
+      - LDFLAGS: "-Wl,-z,relro $LDFLAGS"
+      # Strip debug symbols from programs and libraries when installing
       - INSTALL_PROGRAM: "/usr/bin/install -s"
       - INSTALL_STRIP_FLAG: "-s"
-      - LDFLAGS: "-Wl,-z,relro $LDFLAGS"
     override-build: |
+      # Patch mkoctfile to record the original build flags from above, so that
+      # additional flags from snapcraft build setup aren't leaked
       sed -i "s|%OCTAVE_CONF_CFLAGS%|\"-g -O2 -fstack-protector-strong\"|" src/mkoctfile.in.cc
       sed -i "s|%OCTAVE_CONF_CPPFLAGS%|\"-D_FORTIFY_SOURCE=2\"|" src/mkoctfile.in.cc
       sed -i "s|%OCTAVE_CONF_CXXFLAGS%|\"-g -O2 -fstack-protector-strong\"|" src/mkoctfile.in.cc
       sed -i "s|%OCTAVE_CONF_LDFLAGS%|\"-Wl,-z,relro\"|" src/mkoctfile.in.cc
       sed -i "s|%OCTAVE_CONF_OCT_LINK_OPTS%|\"-Wl,-z,relro\"|" src/mkoctfile.in.cc
       snapcraftctl build
-    after: [alsa]
     override-prime: |
       snapcraftctl prime
       sed -i 's|^Icon=octave|Icon=/share/icons/hicolor/scalable/apps/octave.svg|' share/applications/org.octave.Octave.desktop
+    prime:
+      - -usr/share/texmf/ls-R
+    organize:
+      usr/lib/$SNAPCRAFT_ARCH_TRIPLET/openblas: usr/lib/$SNAPCRAFT_ARCH_TRIPLET
+    after: [alsa]
+
     build-packages:
       - gfortran
       - libarpack2-dev
@@ -165,6 +137,7 @@ parts:
       - qttools5-dev
       - qttools5-dev-tools
       - texinfo
+
     stage-packages:
       - build-essential
       - curl
@@ -208,7 +181,38 @@ parts:
       - libumfpack5
       - locales-all
       - texinfo
-    prime:
-      - -usr/share/texmf/ls-R
-    organize:
-      usr/lib/$SNAPCRAFT_ARCH_TRIPLET/openblas: usr/lib/$SNAPCRAFT_ARCH_TRIPLET
+
+layout:
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/alsa-lib:
+    bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/alsa-lib
+  /etc/asound.conf:
+    bind-file: $SNAP/etc/asound.conf
+  /usr/share/alsa/alsa.conf:
+    bind-file: $SNAP/etc/asound.conf
+
+  # Make staged dri and pulseaudio modules available in expected locations
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/dri
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pulseaudio
+
+  # Make staged perl modules available in expected perl path directories
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl/5.26:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl/5.26
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl5:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/perl5
+  /usr/share/perl:
+    symlink: $SNAP/usr/share/perl
+  /usr/share/perl5/Text:
+    symlink: $SNAP/usr/share/perl5/Text
+  /usr/share/perl5/XML:
+    symlink: $SNAP/usr/share/perl5/XML
+
+  # Make staged qt plugins available in expected locations
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/qt5
+
+  # Make xkb configuration files available in expected locations, required
+  # by qt in 18.04, may not be needed in 20.04
+  /usr/share/X11:
+    symlink: $SNAP/usr/share/X11
