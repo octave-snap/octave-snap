@@ -92,6 +92,9 @@ parts:
       # Strip debug symbols from programs and libraries when installing
       - INSTALL_PROGRAM: "/usr/bin/install -s"
       - INSTALL_STRIP_FLAG: "-s"
+      # Force Octave header files to be found before system header files
+      # This override can be dropped after upgrading to snapcraft version 3.11
+      - INCLUDES: "-Ilibinterp/corefcn"
     override-build: |
       # Patch mkoctfile to record the original build flags from above, so that
       # additional flags from snapcraft build setup aren't leaked
