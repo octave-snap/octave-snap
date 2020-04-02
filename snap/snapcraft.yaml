@@ -216,3 +216,17 @@ layout:
   # by qt in 18.04, may not be needed in 20.04
   /usr/share/X11:
     symlink: $SNAP/usr/share/X11
+
+  # Make all system and staged development library header files available in
+  # standard /usr/include location, to allow compiling oct files and packages
+  /usr/include:
+    bind: $SNAP/usr/include
+
+  # Make certain libc static library fragments available in expected locations,
+  # to allow linking oct files and packages
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libc_nonshared.a:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libc_nonshared.a
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libmvec_nonshared.a:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libmvec_nonshared.a
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libpthread_nonshared.a:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libpthread_nonshared.a
