@@ -23,6 +23,8 @@ apps:
       OCTAVE_HOME: "$SNAP"
       LD_LIBRARY_PATH: "$SNAP/lib/octave/$SNAPCRAFT_PROJECT_VERSION"
       LOCPATH: "$SNAP/usr/lib/locale"
+      PKG_CONFIG_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig"
+      PKG_CONFIG_SYSROOT_DIR: "$SNAP"
     plugs:
       - desktop
       - desktop-legacy
@@ -39,6 +41,8 @@ apps:
       OCTAVE_HOME: "$SNAP"
       LD_LIBRARY_PATH: "$SNAP/lib/octave/$SNAPCRAFT_PROJECT_VERSION"
       LOCPATH: "$SNAP/usr/lib/locale"
+      PKG_CONFIG_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig"
+      PKG_CONFIG_SYSROOT_DIR: "$SNAP"
     plugs:
       - desktop
       - desktop-legacy
@@ -92,6 +96,9 @@ parts:
       # Strip debug symbols from programs and libraries when installing
       - INSTALL_PROGRAM: "/usr/bin/install -s"
       - INSTALL_STRIP_FLAG: "-s"
+      # Force Octave header files to be found before system header files
+      # This override can be dropped after upgrading to snapcraft version 3.11
+      - INCLUDES: "-Ilibinterp/corefcn"
     override-build: |
       # Patch mkoctfile to record the original build flags from above, so that
       # additional flags from snapcraft build setup aren't leaked
@@ -104,6 +111,9 @@ parts:
     override-prime: |
       snapcraftctl prime
       sed -i 's|^Icon=octave|Icon=/share/icons/hicolor/scalable/apps/octave.svg|' share/applications/org.octave.Octave.desktop
+      sed -i 's|^prefix=.*|prefix=/usr|' usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig/*.pc
+      rm -f usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig/hdf5.pc
+      ln -s hdf5-serial.pc usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig/hdf5.pc
     prime:
       - -usr/share/texmf/ls-R
     organize:
@@ -132,6 +142,7 @@ parts:
       - libreadline-dev
       - libsndfile1-dev
       - libsuitesparse-dev
+      - pkg-config
       - portaudio19-dev
       - qtbase5-dev
       - qttools5-dev
@@ -160,9 +171,9 @@ parts:
       - libglpk40
       - libglu1-mesa
       - libgraphicsmagick++-q16-12
-      - libhdf5-100
-      - libopenblas-base
-      - libpcre3
+      - libhdf5-dev
+      - libopenblas-dev
+      - libpcre3-dev
       - libportaudio2
       - libqhull7
       - libqrupdate1
@@ -180,6 +191,7 @@ parts:
       - libsndfile1
       - libumfpack5
       - locales-all
+      - pkg-config
       - texinfo
 
 layout:
@@ -216,3 +228,17 @@ layout:
   # by qt in 18.04, may not be needed in 20.04
   /usr/share/X11:
     symlink: $SNAP/usr/share/X11
+
+  # Make all system and staged development library header files available in
+  # standard /usr/include location, to allow compiling oct files and packages
+  /usr/include:
+    bind: $SNAP/usr/include
+
+  # Make certain libc static library fragments available in expected locations,
+  # to allow linking oct files and packages
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libc_nonshared.a:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libc_nonshared.a
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libmvec_nonshared.a:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libmvec_nonshared.a
+  /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libpthread_nonshared.a:
+    symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libpthread_nonshared.a
