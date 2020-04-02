@@ -23,6 +23,8 @@ apps:
       OCTAVE_HOME: "$SNAP"
       LD_LIBRARY_PATH: "$SNAP/lib/octave/$SNAPCRAFT_PROJECT_VERSION"
       LOCPATH: "$SNAP/usr/lib/locale"
+      PKG_CONFIG_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig"
+      PKG_CONFIG_SYSROOT_DIR: "$SNAP"
     plugs:
       - desktop
       - desktop-legacy
@@ -39,6 +41,8 @@ apps:
       OCTAVE_HOME: "$SNAP"
       LD_LIBRARY_PATH: "$SNAP/lib/octave/$SNAPCRAFT_PROJECT_VERSION"
       LOCPATH: "$SNAP/usr/lib/locale"
+      PKG_CONFIG_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig"
+      PKG_CONFIG_SYSROOT_DIR: "$SNAP"
     plugs:
       - desktop
       - desktop-legacy
@@ -107,6 +111,7 @@ parts:
     override-prime: |
       snapcraftctl prime
       sed -i 's|^Icon=octave|Icon=/share/icons/hicolor/scalable/apps/octave.svg|' share/applications/org.octave.Octave.desktop
+      sed -i 's|^prefix=.*|prefix=/usr|' usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig/*.pc
     prime:
       - -usr/share/texmf/ls-R
     organize:
@@ -135,6 +140,7 @@ parts:
       - libreadline-dev
       - libsndfile1-dev
       - libsuitesparse-dev
+      - pkg-config
       - portaudio19-dev
       - qtbase5-dev
       - qttools5-dev
@@ -183,6 +189,7 @@ parts:
       - libsndfile1
       - libumfpack5
       - locales-all
+      - pkg-config
       - texinfo
 
 layout:
