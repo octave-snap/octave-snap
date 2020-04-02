@@ -163,9 +163,9 @@ parts:
       - libglpk40
       - libglu1-mesa
       - libgraphicsmagick++-q16-12
-      - libhdf5-100
-      - libopenblas-base
-      - libpcre3
+      - libhdf5-dev
+      - libopenblas-dev
+      - libpcre3-dev
       - libportaudio2
       - libqhull7
       - libqrupdate1
