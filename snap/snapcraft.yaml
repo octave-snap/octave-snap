@@ -112,6 +112,8 @@ parts:
       snapcraftctl prime
       sed -i 's|^Icon=octave|Icon=/share/icons/hicolor/scalable/apps/octave.svg|' share/applications/org.octave.Octave.desktop
       sed -i 's|^prefix=.*|prefix=/usr|' usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig/*.pc
+      rm -f usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig/hdf5.pc
+      ln -s hdf5-serial.pc usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig/hdf5.pc
     prime:
       - -usr/share/texmf/ls-R
     organize:
