@@ -175,6 +175,7 @@ parts:
       - libopenblas-dev
       - libpcre3-dev
       - libportaudio2
+      - libpython3-dev
       - libqhull7
       - libqrupdate1
       - libqscintilla2-qt5-13
