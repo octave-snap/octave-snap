@@ -194,6 +194,14 @@ parts:
       - pkg-config
       - texinfo
 
+  python-packages:
+    plugin: python
+    python-packages:
+      - mpmath==1.1.0
+      - sympy==1.5.1
+    prime:
+      - -bin/isympy
+
 layout:
   /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/alsa-lib:
     bind: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/alsa-lib
