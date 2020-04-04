@@ -43,10 +43,12 @@ addons:
     update: true
   snaps:
     - name: core18
+    - name: review-tools
     - name: snapcraft
       confinement: classic
 script:
   - snapcraft snap --destructive-mode
+  - snap-review octave_*.snap
 deploy:
   provider: snap
   edge: true
