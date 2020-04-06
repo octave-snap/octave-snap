@@ -252,3 +252,7 @@ layout:
     symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libmvec_nonshared.a
   /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libpthread_nonshared.a:
     symlink: $SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/libpthread_nonshared.a
+
+  # Make staged Python wheels available in expected system directory
+  /usr/share/python-wheels:
+    symlink: $SNAP/usr/share/python-wheels
