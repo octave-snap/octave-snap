@@ -193,6 +193,7 @@ parts:
       - libumfpack5
       - locales-all
       - pkg-config
+      - python3-venv
       - texinfo
 
   python-packages:
