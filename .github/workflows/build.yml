@@ -1,0 +1,31 @@
+name: Build and publish snap to snap store
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+jobs:
+  build-and-publish:
+    name: Build and publish snap
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build snap
+        id: snapcraft
+        uses: snapcore/action-build@v1
+
+      - name: Archive snap artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: snap
+          path: ${{ steps.snapcraft.outputs.snap }}
+
+      - name: Publish unstable snap builds to edge
+        uses: snapcore/action-publish@v1
+        with:
+          store_login: ${{ secrets.STORE_LOGIN }}
+          snap: ${{ steps.snapcraft.outputs.snap }}
+          release: edge
+        if: ${{ github.ref == 'refs/heads/main' && github.repository_owner == 'octave-snap' }}
