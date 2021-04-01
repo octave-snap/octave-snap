@@ -1,12 +1,12 @@
-name: Build snap
+name: Build and publish snap to snap store
 on:
   push:
   pull_request:
     branches:
       - main
 jobs:
-  build:
-    name: Build snap
+  build-and-publish:
+    name: Build and publish snap
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -21,3 +21,11 @@ jobs:
         with:
           name: snap
           path: ${{ steps.snapcraft.outputs.snap }}
+
+      - name: Publish unstable snap builds to edge
+        uses: snapcore/action-publish@v1
+        with:
+          store_login: ${{ secrets.STORE_LOGIN }}
+          snap: ${{ steps.snapcraft.outputs.snap }}
+          release: edge
+        if: ${{ github.ref == 'refs/heads/main' && github.repository_owner == 'octave-snap' }}
