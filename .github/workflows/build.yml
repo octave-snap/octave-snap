@@ -5,8 +5,8 @@ on:
     branches:
       - main
 jobs:
-  build-and-publish:
-    name: Build and publish snap
+  build:
+    name: Build snap
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -22,10 +22,25 @@ jobs:
           name: snap
           path: ${{ steps.snapcraft.outputs.snap }}
 
-      - name: Publish unstable snap builds to edge
+  publish:
+    name: Publish snap to snap store
+    if: ${{ github.ref == 'refs/heads/main' && github.repository_owner == 'octave-snap' }}
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download snap artifact
+        id: download
+        uses: actions/download-artifact@v2
+        with:
+          name: snap
+
+      - name: Expand the full file name of the snap
+        id: expand
+        run: echo "::set-output name=snap::$(ls ${{ steps.download.outputs.download-path }}/octave_*.snap)"
+
+      - name: Publish unstable snap builds to edge channel
         uses: snapcore/action-publish@v1
         with:
           store_login: ${{ secrets.STORE_LOGIN }}
-          snap: ${{ steps.snapcraft.outputs.snap }}
+          snap: ${{ steps.expand.outputs.snap }}
           release: edge
-        if: ${{ github.ref == 'refs/heads/main' && github.repository_owner == 'octave-snap' }}
