@@ -2,7 +2,7 @@ Octave Snap
 ===========
 
 [![Octave Snap Store Entry](https://snapcraft.io//octave/badge.svg)](https://snapcraft.io/octave)
-[![Build Status](https://travis-ci.com/octave-snap/octave-snap.svg?branch=master)](https://travis-ci.com/octave-snap/octave-snap)
+[![Build Status](https://github.com/octave-snap/octave-snap/actions/workflows/build.yml/badge.svg)](https://github.com/octave-snap/octave-snap/actions/workflows/build.yml)
 
 This is the Octave snap packaging repository.
 
