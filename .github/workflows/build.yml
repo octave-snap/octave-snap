@@ -44,3 +44,23 @@ jobs:
           store_login: ${{ secrets.STORE_LOGIN }}
           snap: ${{ steps.expand.outputs.snap }}
           release: edge
+
+  test:
+    name: Test snap
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download snap artifact
+        id: download
+        uses: actions/download-artifact@v2
+        with:
+          name: snap
+
+      - name: Expand the full file name of the snap
+        id: expand
+        run: echo "::set-output name=snap::$(ls ${{ steps.download.outputs.download-path }}/octave_*.snap)"
+
+      - name: Install the snap and smoke test octave
+        run: |
+          sudo snap install --dangerous ${{ steps.expand.outputs.snap }}
+          /snap/bin/octave --version
