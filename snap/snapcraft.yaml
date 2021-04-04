@@ -12,7 +12,7 @@ description: |
   Matlab so that most programs are easily portable.
 confinement: strict
 grade: stable
-version: '6.1.0'
+version: '6.2.0'
 
 apps:
   octave:
@@ -83,8 +83,8 @@ parts:
 
   octave:
     plugin: autotools
-    source: https://ftpmirror.gnu.org/octave/octave-6.1.0.tar.xz
-    source-checksum: sha256/d6cd6b79ef023e300b9287b56aa79333cfb6b651771d43ade7cbde63ca5a6010
+    source: https://ftpmirror.gnu.org/octave/octave-6.2.0.tar.xz
+    source-checksum: sha256/7b721324cccb3eaeb4efb455508201ac8ccbd200f77106f52342f9ab7f022d1a
     build-environment:
       # Use a sensible default set of build flags, append flags from environment
       - CFLAGS: "-g -O2 -fstack-protector-strong $CFLAGS"
