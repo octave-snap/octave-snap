@@ -38,12 +38,16 @@ jobs:
         id: expand
         run: echo "::set-output name=snap::$(ls ${{ steps.download.outputs.download-path }}/octave_*.snap)"
 
-      - name: Publish unstable snap builds to edge channel
+      - name: Compute the short git commit hash
+        id: git
+        run: echo "::set-output name=commit::$(git rev-parse --short=12 $GITHUB_REF)"
+
+      - name: Publish snap builds to a unique branch on the edge channel
         uses: snapcore/action-publish@v1
         with:
           store_login: ${{ secrets.STORE_LOGIN }}
           snap: ${{ steps.expand.outputs.snap }}
-          release: edge
+          release: edge/main-${{ steps.git.outputs.commit }}
 
   test:
     name: Test snap
