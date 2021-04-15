@@ -23,7 +23,7 @@ apps:
       OCTAVE_HOME: "$SNAP"
       LD_LIBRARY_PATH: "$SNAP/lib/octave/$SNAPCRAFT_PROJECT_VERSION"
       LOCPATH: "$SNAP/usr/lib/locale"
-      PKG_CONFIG_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig"
+      PKG_CONFIG_PATH: "$SNAP/lib/pkgconfig:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig:$SNAP/usr/share/pkgconfig"
       PKG_CONFIG_SYSROOT_DIR: "$SNAP"
     plugs:
       - desktop
@@ -41,7 +41,7 @@ apps:
       OCTAVE_HOME: "$SNAP"
       LD_LIBRARY_PATH: "$SNAP/lib/octave/$SNAPCRAFT_PROJECT_VERSION"
       LOCPATH: "$SNAP/usr/lib/locale"
-      PKG_CONFIG_PATH: "$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig"
+      PKG_CONFIG_PATH: "$SNAP/lib/pkgconfig:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig:$SNAP/usr/share/pkgconfig"
       PKG_CONFIG_SYSROOT_DIR: "$SNAP"
     plugs:
       - desktop
