@@ -139,7 +139,14 @@ parts:
     after: [alsa]
 
     build-packages:
+      - bison
+      - epstool
+      - flex
       - gfortran
+      - ghostscript
+      - gnuplot-nox
+      - gperf
+      - icoutils
       - libarpack2-dev
       - libcurl4-gnutls-dev
       - libfftw3-dev
@@ -158,6 +165,7 @@ parts:
       - libqscintilla2-qt5-dev
       - libqt5opengl5-dev
       - libreadline-dev
+      - librsvg2-bin
       - libsndfile1-dev
       - libsuitesparse-dev
       - pkg-config
@@ -166,6 +174,9 @@ parts:
       - qttools5-dev
       - qttools5-dev-tools
       - texinfo
+      - texlive-fonts-recommended
+      - texlive-latex-base
+      - texlive-plain-generic
 
     stage-packages:
       - build-essential
@@ -208,6 +219,7 @@ parts:
       - libqt5widgets5
       - libqt5xml5
       - libsndfile1
+      - libspqr2
       - libumfpack5
       - locales-all
       - pkg-config
