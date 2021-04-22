@@ -106,6 +106,8 @@ parts:
         hg log -r . -T "{node|short}" | cut -c1-8 > commit.txt
         date -u +%Y-%m-%d > date.txt
         echo "$(cat ac-version.txt)+hg$(cat commit.txt)" > version.txt
+        echo "<release version=\"$(cat version.txt)\" type=\"development\" date=\"$(cat date.txt)\" />" > release.xml
+        sed -i "/<releases>/a\    $(cat release.xml)" etc/icons/org.octave.Octave.appdata.xml
         grade=devel
         version="$(cat version.txt)"
       else
