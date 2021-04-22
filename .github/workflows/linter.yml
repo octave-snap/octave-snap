@@ -2,8 +2,7 @@ name: Lint code base
 on:
   push:
   pull_request:
-    branches:
-      - main
+
 jobs:
   build:
     name: Lint code base
@@ -15,6 +14,6 @@ jobs:
       - name: Lint code base
         uses: github/super-linter@v3
         env:
-          DEFAULT_BRANCH: main
+          DEFAULT_BRANCH: stable
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VALIDATE_JSCPD: false

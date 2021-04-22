@@ -2,8 +2,7 @@ name: Build and publish snap to snap store
 on:
   push:
   pull_request:
-    branches:
-      - main
+
 jobs:
   build:
     name: Build snap
@@ -24,7 +23,7 @@ jobs:
 
   publish:
     name: Publish snap to snap store
-    if: ${{ github.ref == 'refs/heads/main' && github.repository_owner == 'octave-snap' }}
+    if: ${{ github.ref == 'refs/heads/stable' && github.repository_owner == 'octave-snap' }}
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -50,7 +49,7 @@ jobs:
         with:
           store_login: ${{ secrets.STORE_LOGIN }}
           snap: ${{ steps.expand.outputs.snap }}
-          release: edge/main-${{ steps.git.outputs.commit }}
+          release: edge/stable-${{ steps.git.outputs.commit }}
 
   test:
     name: Test snap
