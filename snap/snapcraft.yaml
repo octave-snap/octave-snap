@@ -108,6 +108,7 @@ parts:
         echo "$(cat ac-version.txt)+hg$(cat commit.txt)" > version.txt
         echo "<release version=\"$(cat version.txt)\" type=\"development\" date=\"$(cat date.txt)\" />" > release.xml
         sed -i "/<releases>/a\    $(cat release.xml)" etc/icons/org.octave.Octave.appdata.xml
+        sed -i "s/hg_safe.*||/hg_safe log -r . -T \"{node|short}\" ||/" build-aux/mk-hg-id.sh
         grade=devel
         version="$(cat version.txt)"
       else
