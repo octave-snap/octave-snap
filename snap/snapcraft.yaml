@@ -101,8 +101,17 @@ parts:
     override-build: |
       # Parse octave version information and set snap grade and version
       sed -n '/^AC_INIT/{s/^[^,]*, *\[//;s/\],.*//;p}' configure.ac > ac-version.txt
-      grade=stable
-      version="$(cat ac-version.txt)"
+      if test -d .hg; then
+        # Construct a snapshot version string if we are building from mercurial
+        hg log -r . -T "{node|short}" | cut -c1-8 > commit.txt
+        date -u +%Y-%m-%d > date.txt
+        echo "$(cat ac-version.txt)+hg$(cat commit.txt)" > version.txt
+        grade=devel
+        version="$(cat version.txt)"
+      else
+        grade=stable
+        version="$(cat ac-version.txt)"
+      fi
       snapcraftctl set-grade "$grade"
       snapcraftctl set-version "$version"
 
