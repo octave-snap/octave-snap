@@ -23,7 +23,7 @@ jobs:
 
   publish:
     name: Publish snap to snap store
-    if: ${{ github.ref == 'refs/heads/stable' && github.repository_owner == 'octave-snap' }}
+    if: ${{ (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/stable') && github.repository_owner == 'octave-snap' }}
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -40,16 +40,19 @@ jobs:
         id: expand
         run: echo "::set-output name=snap::$(ls ${{ steps.download.outputs.download-path }}/octave_*.snap)"
 
-      - name: Compute the short git commit hash
-        id: git
-        run: echo "::set-output name=commit::$(git rev-parse --short=12 $GITHUB_REF)"
+      - name: Compute the name of the snap release to publish
+        id: name
+        run: |
+          commit="$(git rev-parse --short=12 $GITHUB_REF)"
+          branch="$(echo $GITHUB_REF | sed 's|^refs/heads/||')"
+          echo "::set-output name=release::edge/${branch}-${commit}"
 
-      - name: Publish snap builds to a unique branch on the edge channel
+      - name: Publish snap builds to a unique release name
         uses: snapcore/action-publish@v1
         with:
           store_login: ${{ secrets.STORE_LOGIN }}
           snap: ${{ steps.expand.outputs.snap }}
-          release: edge/stable-${{ steps.git.outputs.commit }}
+          release: ${{ steps.name.outputs.release }}
 
   test:
     name: Test snap
