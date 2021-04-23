@@ -66,7 +66,14 @@ jobs:
         id: expand
         run: echo "::set-output name=snap::$(ls ${{ steps.download.outputs.download-path }}/octave_*.snap)"
 
-      - name: Install the snap and smoke test octave
-        run: |
-          sudo snap install --dangerous ${{ steps.expand.outputs.snap }}
-          /snap/bin/octave --version
+      - name: Install snap
+        run: sudo snap install --dangerous ${{ steps.expand.outputs.snap }}
+
+      - name: Test running octave --version
+        run: /snap/bin/octave --version
+
+      - name: Test running octave --eval ver
+        run: /snap/bin/octave --eval ver
+
+      - name: Dump octave build configuration
+        run: /snap/bin/octave --eval "disp (__octave_config_info__)"
