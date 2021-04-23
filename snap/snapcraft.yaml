@@ -11,8 +11,7 @@ description: |
   non-interactive programs. The Octave language is quite similar to
   Matlab so that most programs are easily portable.
 confinement: strict
-grade: stable
-version: '6.2.0'
+adopt-info: octave
 
 apps:
   octave:
@@ -100,6 +99,25 @@ parts:
       # This override can be dropped after upgrading to snapcraft version 3.11
       - INCLUDES: "-Ilibinterp/corefcn"
     override-build: |
+      # Parse octave version information and set snap grade and version
+      sed -n '/^AC_INIT/{s/^[^,]*, *\[//;s/\],.*//;p}' configure.ac > ac-version.txt
+      if test -d .hg; then
+        # Construct a snapshot version string if we are building from mercurial
+        hg log -r . -T "{node|short}" | cut -c1-8 > commit.txt
+        date -u +%Y-%m-%d > date.txt
+        echo "$(cat ac-version.txt)+hg$(cat commit.txt)" > version.txt
+        echo "<release version=\"$(cat version.txt)\" type=\"development\" date=\"$(cat date.txt)\" />" > release.xml
+        sed -i "/<releases>/a\    $(cat release.xml)" etc/icons/org.octave.Octave.appdata.xml
+        sed -i "s/hg_safe.*||/hg_safe log -r . -T \"{node|short}\" ||/" build-aux/mk-hg-id.sh
+        grade=devel
+        version="$(cat version.txt)"
+      else
+        grade=stable
+        version="$(cat ac-version.txt)"
+      fi
+      snapcraftctl set-grade "$grade"
+      snapcraftctl set-version "$version"
+
       # Patch mkoctfile to record the original build flags from above, so that
       # additional flags from snapcraft build setup aren't leaked
       sed -i "s|%OCTAVE_CONF_CFLAGS%|\"-g -O2 -fstack-protector-strong\"|" src/mkoctfile.in.cc
@@ -121,7 +139,14 @@ parts:
     after: [alsa]
 
     build-packages:
+      - bison
+      - epstool
+      - flex
       - gfortran
+      - ghostscript
+      - gnuplot-nox
+      - gperf
+      - icoutils
       - libarpack2-dev
       - libcurl4-gnutls-dev
       - libfftw3-dev
@@ -140,6 +165,7 @@ parts:
       - libqscintilla2-qt5-dev
       - libqt5opengl5-dev
       - libreadline-dev
+      - librsvg2-bin
       - libsndfile1-dev
       - libsuitesparse-dev
       - pkg-config
@@ -148,6 +174,9 @@ parts:
       - qttools5-dev
       - qttools5-dev-tools
       - texinfo
+      - texlive-fonts-recommended
+      - texlive-latex-base
+      - texlive-plain-generic
 
     stage-packages:
       - build-essential
@@ -190,6 +219,7 @@ parts:
       - libqt5widgets5
       - libqt5xml5
       - libsndfile1
+      - libspqr2
       - libumfpack5
       - locales-all
       - pkg-config
