@@ -1,0 +1,74 @@
+name: Nightly build and publish to snap edge channel
+on:
+  schedule:
+    - cron: '0 2 * * *'
+
+jobs:
+  build:
+    name: Build snap from upstream development branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout develop branch
+        uses: actions/checkout@v2
+        with:
+          ref: develop
+
+      - name: Build snap
+        id: snapcraft
+        uses: snapcore/action-build@v1
+
+      - name: Archive snap artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: snap
+          path: ${{ steps.snapcraft.outputs.snap }}
+
+  publish:
+    name: Publish snap to snap store
+    if: ${{ github.repository_owner == 'octave-snap' }}
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download snap artifact
+        id: download
+        uses: actions/download-artifact@v2
+        with:
+          name: snap
+
+      - name: Expand the full file name of the snap
+        id: expand
+        run: echo "::set-output name=snap::$(ls ${{ steps.download.outputs.download-path }}/octave_*.snap)"
+
+      - name: Publish development snap builds directly to the edge channel
+        uses: snapcore/action-publish@v1
+        with:
+          store_login: ${{ secrets.STORE_LOGIN }}
+          snap: ${{ steps.expand.outputs.snap }}
+          release: edge
+
+  test:
+    name: Test snap
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download snap artifact
+        id: download
+        uses: actions/download-artifact@v2
+        with:
+          name: snap
+
+      - name: Expand the full file name of the snap
+        id: expand
+        run: echo "::set-output name=snap::$(ls ${{ steps.download.outputs.download-path }}/octave_*.snap)"
+
+      - name: Install snap
+        run: sudo snap install --dangerous ${{ steps.expand.outputs.snap }}
+
+      - name: Test running octave --version
+        run: /snap/bin/octave --version
+
+      - name: Test running octave --eval ver
+        run: /snap/bin/octave --eval ver
+
+      - name: Dump octave build configuration
+        run: /snap/bin/octave --eval "disp (__octave_config_info__)"
