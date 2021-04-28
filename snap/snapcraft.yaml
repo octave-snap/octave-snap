@@ -148,6 +148,7 @@ parts:
       - gnuplot-nox
       - gperf
       - icoutils
+      - less
       - libarpack2-dev
       - libcurl4-gnutls-dev
       - libfftw3-dev
