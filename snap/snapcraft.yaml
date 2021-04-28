@@ -202,6 +202,7 @@ parts:
       - libglu1-mesa
       - libgraphicsmagick++-q16-12
       - libhdf5-dev
+      - libncurses5-dev
       - libopenblas-dev
       - libpcre3-dev
       - libportaudio2
