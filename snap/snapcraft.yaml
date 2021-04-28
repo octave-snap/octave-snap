@@ -183,7 +183,9 @@ parts:
     stage-packages:
       - build-essential
       - curl
+      - epstool
       - gfortran
+      - ghostscript
       - gnuplot-qt
       - libamd2
       - libarpack2
