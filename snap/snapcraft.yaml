@@ -227,6 +227,8 @@ parts:
       - pkg-config
       - python3-venv
       - texinfo
+      - unzip
+      - zip
 
   python-packages:
     plugin: python
