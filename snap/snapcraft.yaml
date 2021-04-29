@@ -20,10 +20,14 @@ apps:
     desktop: share/applications/org.octave.Octave.desktop
     environment:
       OCTAVE_HOME: "$SNAP"
+      GNUPLOT_DRIVER_DIR: "$SNAP/usr/lib/gnuplot"
+      GNUPLOT_LUA_DIR: "$SNAP/usr/share/gnuplot/gnuplot/5.2/lua"
+      GNUPLOT_PS_DIR: "$SNAP/usr/share/gnuplot/gnuplot/5.2/PostScript"
       LD_LIBRARY_PATH: "$SNAP/lib/octave/$SNAPCRAFT_PROJECT_VERSION"
       LOCPATH: "$SNAP/usr/lib/locale"
       PKG_CONFIG_PATH: "$SNAP/lib/pkgconfig:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig:$SNAP/usr/share/pkgconfig"
       PKG_CONFIG_SYSROOT_DIR: "$SNAP"
+      UNITSFILE: "$SNAP/usr/share/units/definitions.units"
     plugs:
       - desktop
       - desktop-legacy
@@ -38,10 +42,14 @@ apps:
     command: bin/octave-cli
     environment:
       OCTAVE_HOME: "$SNAP"
+      GNUPLOT_DRIVER_DIR: "$SNAP/usr/lib/gnuplot"
+      GNUPLOT_LUA_DIR: "$SNAP/usr/share/gnuplot/gnuplot/5.2/lua"
+      GNUPLOT_PS_DIR: "$SNAP/usr/share/gnuplot/gnuplot/5.2/PostScript"
       LD_LIBRARY_PATH: "$SNAP/lib/octave/$SNAPCRAFT_PROJECT_VERSION"
       LOCPATH: "$SNAP/usr/lib/locale"
       PKG_CONFIG_PATH: "$SNAP/lib/pkgconfig:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig:$SNAP/usr/share/pkgconfig"
       PKG_CONFIG_SYSROOT_DIR: "$SNAP"
+      UNITSFILE: "$SNAP/usr/share/units/definitions.units"
     plugs:
       - desktop
       - desktop-legacy
@@ -133,6 +141,8 @@ parts:
       sed -i 's|^prefix=.*|prefix=/usr|' usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig/*.pc
       rm -f usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig/hdf5.pc
       ln -s hdf5-serial.pc usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig/hdf5.pc
+      rm -f usr/bin/gnuplot
+      ln -s gnuplot-qt usr/bin/gnuplot
     prime:
       - -usr/share/texmf/ls-R
     organize:
@@ -148,6 +158,7 @@ parts:
       - gnuplot-nox
       - gperf
       - icoutils
+      - less
       - libarpack2-dev
       - libcurl4-gnutls-dev
       - libfftw3-dev
@@ -182,8 +193,11 @@ parts:
     stage-packages:
       - build-essential
       - curl
+      - epstool
       - gfortran
+      - ghostscript
       - gnuplot-qt
+      - info
       - libamd2
       - libarpack2
       - libcamd2
@@ -202,6 +216,7 @@ parts:
       - libglu1-mesa
       - libgraphicsmagick++-q16-12
       - libhdf5-dev
+      - libncurses5-dev
       - libopenblas-dev
       - libpcre3-dev
       - libportaudio2
@@ -226,6 +241,9 @@ parts:
       - pkg-config
       - python3-venv
       - texinfo
+      - units
+      - unzip
+      - zip
 
   python-packages:
     plugin: python
