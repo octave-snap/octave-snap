@@ -27,6 +27,7 @@ apps:
       LOCPATH: "$SNAP/usr/lib/locale"
       PKG_CONFIG_PATH: "$SNAP/lib/pkgconfig:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig:$SNAP/usr/share/pkgconfig"
       PKG_CONFIG_SYSROOT_DIR: "$SNAP"
+      UNITSFILE: "$SNAP/usr/share/units/definitions.units"
     plugs:
       - desktop
       - desktop-legacy
@@ -48,6 +49,7 @@ apps:
       LOCPATH: "$SNAP/usr/lib/locale"
       PKG_CONFIG_PATH: "$SNAP/lib/pkgconfig:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig:$SNAP/usr/share/pkgconfig"
       PKG_CONFIG_SYSROOT_DIR: "$SNAP"
+      UNITSFILE: "$SNAP/usr/share/units/definitions.units"
     plugs:
       - desktop
       - desktop-legacy
@@ -238,6 +240,7 @@ parts:
       - pkg-config
       - python3-venv
       - texinfo
+      - units
       - unzip
       - zip
 
