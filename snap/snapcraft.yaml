@@ -197,6 +197,7 @@ parts:
       - gfortran
       - ghostscript
       - gnuplot-qt
+      - info
       - libamd2
       - libarpack2
       - libcamd2
