@@ -1,15 +1,17 @@
-name: Build and publish snap to snap store
+name: Nightly build and publish to snap edge channel
 on:
-  push:
-  pull_request:
+  schedule:
+    - cron: '0 2 * * *'
 
 jobs:
   build:
-    name: Build snap
+    name: Build snap from upstream development branch
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
+      - name: Checkout develop branch
         uses: actions/checkout@v2
+        with:
+          ref: develop
 
       - name: Build snap
         id: snapcraft
@@ -23,13 +25,10 @@ jobs:
 
   publish:
     name: Publish snap to snap store
-    if: ${{ (github.ref == 'refs/heads/develop' || github.ref == 'refs/heads/stable') && github.repository_owner == 'octave-snap' }}
+    if: ${{ github.repository_owner == 'octave-snap' }}
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
       - name: Download snap artifact
         id: download
         uses: actions/download-artifact@v2
@@ -40,19 +39,12 @@ jobs:
         id: expand
         run: echo "::set-output name=snap::$(ls ${{ steps.download.outputs.download-path }}/octave_*.snap)"
 
-      - name: Compute the name of the snap release to publish
-        id: name
-        run: |
-          commit="$(git rev-parse --short=12 $GITHUB_REF)"
-          branch="$(echo $GITHUB_REF | sed 's|^refs/heads/||')"
-          echo "::set-output name=release::edge/${branch}-${commit}"
-
-      - name: Publish snap builds to a unique release name
+      - name: Publish development snap builds directly to the edge channel
         uses: snapcore/action-publish@v1
         with:
           store_login: ${{ secrets.STORE_LOGIN }}
           snap: ${{ steps.expand.outputs.snap }}
-          release: ${{ steps.name.outputs.release }}
+          release: edge
 
   test:
     name: Test snap
