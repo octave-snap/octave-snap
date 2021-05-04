@@ -97,12 +97,12 @@ parts:
     source-commit: "@"
     build-environment:
       # Use a sensible default set of build flags, append flags from environment
-      - CFLAGS: "-g -O2 -fstack-protector-strong $CFLAGS"
-      - CPPFLAGS: "-D_FORTIFY_SOURCE=2 $CPPFLAGS"
-      - CXXFLAGS: "-g -O2 -fstack-protector-strong $CXXFLAGS"
-      - FFLAGS: "-g -O2 $FFLAGS"
+      - CFLAGS: "-g -O2 -fexceptions -fstack-protector-strong${CFLAGS:+ $CFLAGS}"
+      - CPPFLAGS: "-D_FORTIFY_SOURCE=2${CPPFLAGS:+ $CPPFLAGS}"
+      - CXXFLAGS: "-g -O2 -fexceptions -fstack-protector-strong${CXXFLAGS:+ $CXXFLAGS}"
+      - FFLAGS: "-g -O2${FFLAGS:+ $FFLAGS}"
       - FLIBS: "-lgfortran -lquadmath -lm"
-      - LDFLAGS: "-Wl,-z,relro $LDFLAGS"
+      - LDFLAGS: "-Wl,-z,relro,-z,now -Wl,--as-needed${LDFLAGS:+ $LDFLAGS}"
       # Strip debug symbols from programs and libraries when installing
       - INSTALL_PROGRAM: "/usr/bin/install -s"
       - INSTALL_STRIP_FLAG: "-s"
@@ -129,13 +129,13 @@ parts:
       snapcraftctl set-grade "$grade"
       snapcraftctl set-version "$version"
 
-      # Patch mkoctfile to record the original build flags from above, so that
-      # additional flags from snapcraft build setup aren't leaked
-      sed -i "s|%OCTAVE_CONF_CFLAGS%|\"-g -O2 -fstack-protector-strong\"|" src/mkoctfile.in.cc
-      sed -i "s|%OCTAVE_CONF_CPPFLAGS%|\"-D_FORTIFY_SOURCE=2\"|" src/mkoctfile.in.cc
-      sed -i "s|%OCTAVE_CONF_CXXFLAGS%|\"-g -O2 -fstack-protector-strong\"|" src/mkoctfile.in.cc
-      sed -i "s|%OCTAVE_CONF_LDFLAGS%|\"-Wl,-z,relro\"|" src/mkoctfile.in.cc
-      sed -i "s|%OCTAVE_CONF_OCT_LINK_OPTS%|\"-Wl,-z,relro\"|" src/mkoctfile.in.cc
+      # Patch build_env and mkoctfile to record the original build flags from
+      # above, so that additional flags from snapcraft build setup aren't leaked
+      sed -i "s|%OCTAVE_CONF_CFLAGS%|\"-g -O2 -fexceptions -fstack-protector-strong\"|" libinterp/build-env.in.cc src/mkoctfile.in.cc
+      sed -i "s|%OCTAVE_CONF_CPPFLAGS%|\"-D_FORTIFY_SOURCE=2\"|" libinterp/build-env.in.cc src/mkoctfile.in.cc
+      sed -i "s|%OCTAVE_CONF_CXXFLAGS%|\"-g -O2 -fexceptions -fstack-protector-strong\"|" libinterp/build-env.in.cc src/mkoctfile.in.cc
+      sed -i "s|%OCTAVE_CONF_LDFLAGS%|\"-Wl,-z,relro,-z,now -Wl,--as-needed\"|" libinterp/build-env.in.cc src/mkoctfile.in.cc
+      sed -i "s|%OCTAVE_CONF_OCT_LINK_OPTS%|\"-Wl,-z,relro,-z,now -Wl,--as-needed\"|" libinterp/build-env.in.cc src/mkoctfile.in.cc
       snapcraftctl build
     override-prime: |
       snapcraftctl prime
