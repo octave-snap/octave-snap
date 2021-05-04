@@ -97,12 +97,12 @@ parts:
     source-commit: "@"
     build-environment:
       # Use a sensible default set of build flags, append flags from environment
-      - CFLAGS: "-g -O2 -fstack-protector-strong $CFLAGS"
-      - CPPFLAGS: "-D_FORTIFY_SOURCE=2 $CPPFLAGS"
-      - CXXFLAGS: "-g -O2 -fstack-protector-strong $CXXFLAGS"
-      - FFLAGS: "-g -O2 $FFLAGS"
+      - CFLAGS: "-g -O2 -fstack-protector-strong${CFLAGS:+ $CFLAGS}"
+      - CPPFLAGS: "-D_FORTIFY_SOURCE=2${CPPFLAGS:+ $CPPFLAGS}"
+      - CXXFLAGS: "-g -O2 -fstack-protector-strong${CXXFLAGS:+ $CXXFLAGS}"
+      - FFLAGS: "-g -O2${FFLAGS:+ $FFLAGS}"
       - FLIBS: "-lgfortran -lquadmath -lm"
-      - LDFLAGS: "-Wl,-z,relro $LDFLAGS"
+      - LDFLAGS: "-Wl,-z,relro${LDFLAGS:+ $LDFLAGS}"
       # Strip debug symbols from programs and libraries when installing
       - INSTALL_PROGRAM: "/usr/bin/install -s"
       - INSTALL_STRIP_FLAG: "-s"
