@@ -102,7 +102,7 @@ parts:
       - CXXFLAGS: "-g -O2 -fexceptions -fstack-protector-strong${CXXFLAGS:+ $CXXFLAGS}"
       - FFLAGS: "-g -O2${FFLAGS:+ $FFLAGS}"
       - FLIBS: "-lgfortran -lquadmath -lm"
-      - LDFLAGS: "-Wl,-z,relro,-z,now${LDFLAGS:+ $LDFLAGS}"
+      - LDFLAGS: "-Wl,-z,relro,-z,now -Wl,--as-needed${LDFLAGS:+ $LDFLAGS}"
       # Strip debug symbols from programs and libraries when installing
       - INSTALL_PROGRAM: "/usr/bin/install -s"
       - INSTALL_STRIP_FLAG: "-s"
@@ -134,8 +134,8 @@ parts:
       sed -i "s|%OCTAVE_CONF_CFLAGS%|\"-g -O2 -fexceptions -fstack-protector-strong\"|" src/mkoctfile.in.cc
       sed -i "s|%OCTAVE_CONF_CPPFLAGS%|\"-D_FORTIFY_SOURCE=2\"|" src/mkoctfile.in.cc
       sed -i "s|%OCTAVE_CONF_CXXFLAGS%|\"-g -O2 -fexceptions -fstack-protector-strong\"|" src/mkoctfile.in.cc
-      sed -i "s|%OCTAVE_CONF_LDFLAGS%|\"-Wl,-z,relro,-z,now\"|" src/mkoctfile.in.cc
-      sed -i "s|%OCTAVE_CONF_OCT_LINK_OPTS%|\"-Wl,-z,relro,-z,now\"|" src/mkoctfile.in.cc
+      sed -i "s|%OCTAVE_CONF_LDFLAGS%|\"-Wl,-z,relro,-z,now -Wl,--as-needed\"|" src/mkoctfile.in.cc
+      sed -i "s|%OCTAVE_CONF_OCT_LINK_OPTS%|\"-Wl,-z,relro,-z,now -Wl,--as-needed\"|" src/mkoctfile.in.cc
       snapcraftctl build
     override-prime: |
       snapcraftctl prime
