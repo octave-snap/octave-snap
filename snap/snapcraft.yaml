@@ -223,7 +223,7 @@ parts:
       - libpcre3-dev
       - libportaudio2
       - libpython3-dev
-      - libqhull7
+      - libqhull-r7
       - libqrupdate1
       - libqscintilla2-qt5-13
       - libqt5core5a
