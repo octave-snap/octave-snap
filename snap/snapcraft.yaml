@@ -84,6 +84,9 @@ parts:
       EOF
     override-build: |
       install -m644 -D -t $SNAPCRAFT_PART_INSTALL/etc asound.conf
+    prime:
+      - -usr/share/doc
+      - -usr/share/man
     build-packages:
       - libasound2-dev
     stage-packages:
@@ -146,6 +149,10 @@ parts:
       rm -f usr/bin/gnuplot
       ln -s gnuplot-qt usr/bin/gnuplot
     prime:
+      - -share/man
+      - -usr/share/doc
+      - -usr/share/doc-base
+      - -usr/share/man
       - -usr/share/texmf/ls-R
     organize:
       usr/lib/$SNAPCRAFT_ARCH_TRIPLET/openblas: usr/lib/$SNAPCRAFT_ARCH_TRIPLET
@@ -254,6 +261,10 @@ parts:
       - sympy==1.5.1
     prime:
       - -bin/isympy
+      - -share/man
+      - -usr/share/doc
+      - -usr/share/man
+
 
 layout:
   /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/alsa-lib:
