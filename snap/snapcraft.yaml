@@ -23,6 +23,7 @@ apps:
       GNUPLOT_DRIVER_DIR: "$SNAP/usr/lib/gnuplot"
       GNUPLOT_LUA_DIR: "$SNAP/usr/share/gnuplot/gnuplot/5.2/lua"
       GNUPLOT_PS_DIR: "$SNAP/usr/share/gnuplot/gnuplot/5.2/PostScript"
+      GS_LIB: "$SNAP/usr/share/ghostscript/9.26/Resource/Init:$SNAP/usr/share/ghostscript/9.26/lib:$SNAP/usr/share/ghostscript/9.26/Resource/Font:$SNAP/usr/share/ghostscript/fonts:$SNAP/usr/share/fonts"
       LD_LIBRARY_PATH: "$SNAP/lib/octave/$SNAPCRAFT_PROJECT_VERSION"
       LOCPATH: "$SNAP/usr/lib/locale"
       PKG_CONFIG_PATH: "$SNAP/lib/pkgconfig:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig:$SNAP/usr/share/pkgconfig"
@@ -46,6 +47,7 @@ apps:
       GNUPLOT_DRIVER_DIR: "$SNAP/usr/lib/gnuplot"
       GNUPLOT_LUA_DIR: "$SNAP/usr/share/gnuplot/gnuplot/5.2/lua"
       GNUPLOT_PS_DIR: "$SNAP/usr/share/gnuplot/gnuplot/5.2/PostScript"
+      GS_LIB: "$SNAP/usr/share/ghostscript/9.26/Resource/Init:$SNAP/usr/share/ghostscript/9.26/lib:$SNAP/usr/share/ghostscript/9.26/Resource/Font:$SNAP/usr/share/ghostscript/fonts:$SNAP/usr/share/fonts"
       LD_LIBRARY_PATH: "$SNAP/lib/octave/$SNAPCRAFT_PROJECT_VERSION"
       LOCPATH: "$SNAP/usr/lib/locale"
       PKG_CONFIG_PATH: "$SNAP/lib/pkgconfig:$SNAP/usr/lib/$SNAPCRAFT_ARCH_TRIPLET/pkgconfig:$SNAP/usr/share/pkgconfig"
@@ -84,6 +86,9 @@ parts:
       EOF
     override-build: |
       install -m644 -D -t $SNAPCRAFT_PART_INSTALL/etc asound.conf
+    prime:
+      - -usr/share/doc
+      - -usr/share/man
     build-packages:
       - libasound2-dev
     stage-packages:
@@ -96,12 +101,12 @@ parts:
     source-checksum: sha256/7b721324cccb3eaeb4efb455508201ac8ccbd200f77106f52342f9ab7f022d1a
     build-environment:
       # Use a sensible default set of build flags, append flags from environment
-      - CFLAGS: "-g -O2 -fstack-protector-strong $CFLAGS"
-      - CPPFLAGS: "-D_FORTIFY_SOURCE=2 $CPPFLAGS"
-      - CXXFLAGS: "-g -O2 -fstack-protector-strong $CXXFLAGS"
-      - FFLAGS: "-g -O2 $FFLAGS"
+      - CFLAGS: "-g -O2 -fexceptions -fstack-protector-strong${CFLAGS:+ $CFLAGS}"
+      - CPPFLAGS: "-D_FORTIFY_SOURCE=2${CPPFLAGS:+ $CPPFLAGS}"
+      - CXXFLAGS: "-g -O2 -fexceptions -fstack-protector-strong${CXXFLAGS:+ $CXXFLAGS}"
+      - FFLAGS: "-g -O2${FFLAGS:+ $FFLAGS}"
       - FLIBS: "-lgfortran -lquadmath -lm"
-      - LDFLAGS: "-Wl,-z,relro $LDFLAGS"
+      - LDFLAGS: "-Wl,-z,relro,-z,now -Wl,--as-needed${LDFLAGS:+ $LDFLAGS}"
       # Strip debug symbols from programs and libraries when installing
       - INSTALL_PROGRAM: "/usr/bin/install -s"
       - INSTALL_STRIP_FLAG: "-s"
@@ -128,13 +133,13 @@ parts:
       snapcraftctl set-grade "$grade"
       snapcraftctl set-version "$version"
 
-      # Patch mkoctfile to record the original build flags from above, so that
-      # additional flags from snapcraft build setup aren't leaked
-      sed -i "s|%OCTAVE_CONF_CFLAGS%|\"-g -O2 -fstack-protector-strong\"|" src/mkoctfile.in.cc
-      sed -i "s|%OCTAVE_CONF_CPPFLAGS%|\"-D_FORTIFY_SOURCE=2\"|" src/mkoctfile.in.cc
-      sed -i "s|%OCTAVE_CONF_CXXFLAGS%|\"-g -O2 -fstack-protector-strong\"|" src/mkoctfile.in.cc
-      sed -i "s|%OCTAVE_CONF_LDFLAGS%|\"-Wl,-z,relro\"|" src/mkoctfile.in.cc
-      sed -i "s|%OCTAVE_CONF_OCT_LINK_OPTS%|\"-Wl,-z,relro\"|" src/mkoctfile.in.cc
+      # Patch build_env and mkoctfile to record the original build flags from
+      # above, so that additional flags from snapcraft build setup aren't leaked
+      sed -i "s|%OCTAVE_CONF_CFLAGS%|\"-g -O2 -fexceptions -fstack-protector-strong\"|" libinterp/build-env.in.cc src/mkoctfile.in.cc
+      sed -i "s|%OCTAVE_CONF_CPPFLAGS%|\"-D_FORTIFY_SOURCE=2\"|" libinterp/build-env.in.cc src/mkoctfile.in.cc
+      sed -i "s|%OCTAVE_CONF_CXXFLAGS%|\"-g -O2 -fexceptions -fstack-protector-strong\"|" libinterp/build-env.in.cc src/mkoctfile.in.cc
+      sed -i "s|%OCTAVE_CONF_LDFLAGS%|\"-Wl,-z,relro,-z,now -Wl,--as-needed\"|" libinterp/build-env.in.cc src/mkoctfile.in.cc
+      sed -i "s|%OCTAVE_CONF_OCT_LINK_OPTS%|\"-Wl,-z,relro,-z,now -Wl,--as-needed\"|" libinterp/build-env.in.cc src/mkoctfile.in.cc
       snapcraftctl build
     override-prime: |
       snapcraftctl prime
@@ -145,6 +150,10 @@ parts:
       rm -f usr/bin/gnuplot
       ln -s gnuplot-qt usr/bin/gnuplot
     prime:
+      - -share/man
+      - -usr/share/doc
+      - -usr/share/doc-base
+      - -usr/share/man
       - -usr/share/texmf/ls-R
     organize:
       usr/lib/$SNAPCRAFT_ARCH_TRIPLET/openblas: usr/lib/$SNAPCRAFT_ARCH_TRIPLET
@@ -253,6 +262,10 @@ parts:
       - sympy==1.5.1
     prime:
       - -bin/isympy
+      - -share/man
+      - -usr/share/doc
+      - -usr/share/man
+
 
 layout:
   /usr/lib/$SNAPCRAFT_ARCH_TRIPLET/alsa-lib:
