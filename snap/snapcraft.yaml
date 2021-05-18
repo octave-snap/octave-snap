@@ -196,6 +196,7 @@ parts:
       - qtbase5-dev
       - qttools5-dev
       - qttools5-dev-tools
+      - rapidjson-dev
       - texinfo
       - texlive-fonts-recommended
       - texlive-latex-base
