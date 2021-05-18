@@ -232,7 +232,7 @@ parts:
       - libpcre3-dev
       - libportaudio2
       - libpython3-dev
-      - libqhull-r7
+      - libqhull7
       - libqrupdate1
       - libqscintilla2-qt5-13
       - libqt5core5a
