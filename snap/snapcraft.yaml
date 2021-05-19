@@ -134,6 +134,14 @@ parts:
       snapcraftctl set-grade "$grade"
       snapcraftctl set-version "$version"
 
+      # Patch RapidJSON header files with upstream fixes that haven't been
+      # incorporated into the Ubuntu distributed version of the library
+      if test -d /usr/include/rapidjson/.orig; then
+        cp -a /usr/include/rapidjson/.orig/*.h /usr/include/rapidjson
+      fi
+      patch -p3 -N -d /usr/include/rapidjson -b -B .orig/ < $SNAPCRAFT_PROJECT_DIR/patches/rapidjson-issue-905.patch
+      patch -p3 -N -d /usr/include/rapidjson -b -B .orig/ < $SNAPCRAFT_PROJECT_DIR/patches/rapidjson-issue-1718.patch
+
       # Patch build_env and mkoctfile to record the original build flags from
       # above, so that additional flags from snapcraft build setup aren't leaked
       sed -i "s|%OCTAVE_CONF_CFLAGS%|\"-g -O2 -fexceptions -fstack-protector-strong\"|" libinterp/build-env.in.cc src/mkoctfile.in.cc
@@ -196,6 +204,7 @@ parts:
       - qtbase5-dev
       - qttools5-dev
       - qttools5-dev-tools
+      - rapidjson-dev
       - texinfo
       - texlive-fonts-recommended
       - texlive-latex-base
