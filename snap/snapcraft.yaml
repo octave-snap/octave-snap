@@ -97,8 +97,8 @@ parts:
 
   octave:
     plugin: autotools
-    source: https://alpha.gnu.org/gnu/octave/octave-6.3.90.tar.xz
-    source-checksum: sha256/5e8743568cbf20b5049d644b39b26f09ef5a209161074f3c4993aded53147f6d
+    source: https://ftpmirror.gnu.org/octave/octave-6.4.0.tar.xz
+    source-checksum: sha256/6c1555f5aff0e655b88cad8e8bc2b740ec3a6f3f61898e4997359c2af55e5d20
     build-environment:
       # Use a sensible default set of build flags, append flags from environment
       - CFLAGS: "-g -O2 -fexceptions -fstack-protector-strong${CFLAGS:+ $CFLAGS}"
