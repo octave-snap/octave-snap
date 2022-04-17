@@ -16,6 +16,8 @@ jobs:
       - name: Build snap
         id: snapcraft
         uses: snapcore/action-build@v1
+        with:
+          snapcraft-channel: 5.x/stable
 
       - name: Archive snap artifact
         uses: actions/upload-artifact@v2
