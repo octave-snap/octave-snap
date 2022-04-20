@@ -1,0 +1,23 @@
+From d88be8ef1649eca4602348d1aab5c16c36f83d4f Mon Sep 17 00:00:00 2001
+From: Milo Yip <miloyip@gmail.com>
+Date: Mon, 27 Mar 2017 14:05:03 +0800
+Subject: [PATCH] Fix #905 unable to set writeFlags for PrettyWriter
+
+---
+ include/rapidjson/prettywriter.h   |  2 +-
+ test/unittest/prettywritertest.cpp | 43 ++++++++++++++++++++++++++++++
+ 2 files changed, 44 insertions(+), 1 deletion(-)
+
+diff --git a/include/rapidjson/prettywriter.h b/include/rapidjson/prettywriter.h
+index ef36a8c2a..98dfb3060 100644
+--- a/include/rapidjson/prettywriter.h
++++ b/include/rapidjson/prettywriter.h
+@@ -47,7 +47,7 @@ enum PrettyFormatOptions {
+ template<typename OutputStream, typename SourceEncoding = UTF8<>, typename TargetEncoding = UTF8<>, typename StackAllocator = CrtAllocator, unsigned writeFlags = kWriteDefaultFlags>
+ class PrettyWriter : public Writer<OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags> {
+ public:
+-    typedef Writer<OutputStream, SourceEncoding, TargetEncoding, StackAllocator> Base;
++    typedef Writer<OutputStream, SourceEncoding, TargetEncoding, StackAllocator, writeFlags> Base;
+     typedef typename Base::Ch Ch;
+
+     //! Constructor
